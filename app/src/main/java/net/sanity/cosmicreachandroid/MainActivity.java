@@ -10,10 +10,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import finalforeach.cosmicreach.lwjgl3.Lwjgl3Launcher;
+import finalforeach.cosmicreach.lwjgl3.StartupHelper;
 import net.sanity.cosmicreachandroid.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import net.sanity.cosmicreachandroid.launch.AndroidLauncher;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("the log");
 
-        Lwjgl3Launcher.main(new String[]{});
+        AndroidLauncher.main(new String[]{});
 
         /*binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
