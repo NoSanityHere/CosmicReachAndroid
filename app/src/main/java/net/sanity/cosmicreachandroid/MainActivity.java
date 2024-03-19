@@ -1,17 +1,9 @@
 package net.sanity.cosmicreachandroid;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import finalforeach.cosmicreach.lwjgl3.Lwjgl3Launcher;
-import finalforeach.cosmicreach.lwjgl3.StartupHelper;
-import net.sanity.cosmicreachandroid.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,34 +11,31 @@ import net.sanity.cosmicreachandroid.launch.AndroidLauncher;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    public static MainActivity app;
+    private static boolean started = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!started) {
+            started = true;
+            app = this;
+            setContentView(R.layout.activity_main);
 
-        System.out.println("the log");
-
-        AndroidLauncher.main(new String[]{});
-
-        /*binding = ActivityMainBinding.inflate(getLayoutInflater());
+        /*ActivityMainBinding binding;
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);*/
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });*/
+            AndroidLauncher.launch();
+        } else {
+            System.out.println("attempted to start for second time");
+        }
     }
 
     @Override
@@ -71,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    @SuppressLint("SetTextI18n")
+    public static void showCrash(String text) {
+        System.out.println("Showing crash screen");
+        System.out.println(text);
+        app.setContentView(R.layout.crash_screen);
+
+        TextView message = app.findViewById(R.id.crashInfo);
+        message.setText("UH OH: Crashed\nCrash info:\n" + text);
     }
 }

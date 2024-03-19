@@ -1,19 +1,16 @@
 package net.sanity.cosmicreachandroid.launch;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowListener;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration.GLEmulation;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import finalforeach.cosmicreach.BlockGame;
 import finalforeach.cosmicreach.gamestates.GameState;
 import finalforeach.cosmicreach.gamestates.PauseMenu;
-import finalforeach.cosmicreach.lwjgl3.CrashScreen;
 import finalforeach.cosmicreach.lwjgl3.StartupHelper;
-import finalforeach.cosmicreach.rendering.shaders.GameShader;
 import finalforeach.cosmicreach.settings.GraphicsSettings;
-import java.io.IOException;
+
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -24,14 +21,14 @@ public class AndroidLauncher {
 
     }
 
-    public static void main(String[] args) {
-        if (StartupHelper.startNewJvmIfRequired()) {
+    public static void launch() {
+        if (!StartupHelper.startNewJvmIfRequired()) {
             final StringBuilder preStartErr = new StringBuilder();
             final PrintStream defaultErr = System.err;
 
             try {
                 System.setErr(new PrintStream(new OutputStream() {
-                    public void write(int b) throws IOException {
+                    public void write(int b){
                         defaultErr.write(b);
                         if (!BlockGame.gameStarted) {
                             preStartErr.append(Character.toChars(b));
@@ -43,9 +40,10 @@ public class AndroidLauncher {
                 }));
                 createApplication();
             } catch (Exception var4) {
-                throw new RuntimeException("it didnt work", var4);
-                //CrashScreen.showCrash(startTime, preStartErr, var4);
+                System.out.println("uh oh bad thingies");
+                CrashScreen.showCrash(startTime, preStartErr, var4);
             }
+
         }
     }
 
@@ -58,7 +56,7 @@ public class AndroidLauncher {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setTitle("Cosmic Reach");
         configuration.useVsync(GraphicsSettings.vSyncEnabled.getValue());
-        configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate);
+        configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate); // error here
         configuration.setWindowedMode(1024, 576);
         configuration.setWindowIcon("textures/logox128.png", "textures/logox64.png", "textures/logox48.png", "textures/logox32.png", "textures/logox16.png");
         configuration.setWindowListener(new Lwjgl3WindowListener() {
